@@ -1,69 +1,122 @@
-import Image from "next/image";
+import CpuVsGpu from "@/components/CpuVsGpu";
+import GpuAnatomy from "@/components/GpuAnatomy";
+import GraphicsPipeline from "@/components/GraphicsPipeline";
+import Hero from "@/components/Hero";
+import Roadmap from "@/components/Roadmap";
+import SiteHeader from "@/components/SiteHeader";
+import TinyGpuSim from "@/components/TinyGpuSim";
+import { Reveal } from "@/components/ui";
+
+function Section({
+  id,
+  num,
+  kicker,
+  title,
+  lead,
+  children,
+}: {
+  id: string;
+  num: number;
+  kicker: string;
+  title: string;
+  lead: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-16 py-14 sm:py-20">
+      <Reveal stagger={0.08}>
+        <p className="flex items-center gap-3 font-mono text-xs tracking-[0.14em] text-comp uppercase">
+          <span className="text-faint">0{num}</span>
+          <span className="h-px w-8 bg-linestrong" />
+          {kicker}
+        </p>
+        <h2
+          id={`${id}-title`}
+          className="mt-4 max-w-3xl text-3xl font-semibold tracking-[-0.025em] sm:text-4xl"
+        >
+          {title}
+        </h2>
+        <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-mute sm:text-base">{lead}</p>
+      </Reveal>
+      <Reveal className="mt-8 sm:mt-10" delay={0.1}>
+        {children}
+      </Reveal>
+    </section>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div className="relative">
+      <div className="backdrop" aria-hidden="true" />
+      <a
+        href="#anatomy"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-comp focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-black"
+      >
+        Skip to content
+      </a>
+      <SiteHeader />
+
+      <main id="top" className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        <Hero />
+
+        <Section
+          id="anatomy"
+          num={1}
+          kicker="Components"
+          title="The components of a graphics card"
+          lead="A simplified map of a graphics card. The dark rectangle in the middle is the GPU chip itself; everything around it exists to feed it data, power and cool air. Select a block to learn about it, or start the tour to follow one job through the whole card."
+        >
+          <GpuAnatomy />
+        </Section>
+
+        <Section
+          id="parallel"
+          num={2}
+          kicker="Parallelism"
+          title="Why many simple cores beat a few fast ones"
+          lead="A CPU has a handful of very capable cores. A GPU has thousands of basic ones. Start the race to see what that means when the job is to colour every pixel of an image."
+        >
+          <CpuVsGpu />
+        </Section>
+
+        <Section
+          id="core"
+          num={3}
+          kicker="Live simulator"
+          title="Inside the compute cores"
+          lead="A working simulation of a 4-core GPU. Every core runs the same program in lock-step, repeating three actions: fetch the next instruction, decode what it means, execute it. Press Step and watch the registers and memory change."
+        >
+          <TinyGpuSim />
+        </Section>
+
+        <Section
+          id="pipeline"
+          num={4}
+          kicker="Graphics pipeline"
+          title="How a frame is drawn"
+          lead="For graphics, the cores and the fixed-function circuits work as a production line called the graphics pipeline. Here it is drawing a single triangle on a tiny 28×18-pixel screen."
+        >
+          <GraphicsPipeline />
+        </Section>
+
+        <Section
+          id="build"
+          num={5}
+          kicker="Next steps"
+          title="From understanding it to building one"
+          lead="Everything on this page can be built at small scale by one person. The tiny GPU in section 3 is the realistic first target, and these are the steps to get there."
+        >
+          <Roadmap />
+        </Section>
       </main>
+
+      <footer className="relative border-t border-line">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-8 text-[13px] text-faint sm:px-6">
+          <span className="font-medium text-mute">GPU Explorer</span>
+          <span>Diagrams are simplified for learning; real chips have many more parts.</span>
+        </div>
+      </footer>
     </div>
   );
 }

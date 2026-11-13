@@ -1,26 +1,230 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-bg: #07090d;
+  --color-panel: #0c1016;
+  --color-panel2: #121821;
+  --color-panel3: #19212d;
+  --color-line: #1d2531;
+  --color-linestrong: #2e3a4b;
+  --color-ink: #eef2f7;
+  --color-mute: #93a0b3;
+  --color-faint: #5f6c80;
+  --color-ctrl: #f5b54a;
+  --color-comp: #5ee6a0;
+  --color-mem: #5ab8ff;
+  --color-io: #b79bff;
+  --color-pwr: #ff8370;
+  --color-cool: #4fd6d6;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-bg);
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(94, 230, 160, 0.3);
+}
+
+/* keyboard focus: one consistent ring everywhere */
+:focus-visible {
+  outline: 2px solid var(--color-comp);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* page backdrop: faint engineering grid that fades out */
+.backdrop {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 900px;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 0%, #000 30%, transparent 75%);
+}
+.backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(600px 320px at 78% 22%, rgba(94, 230, 160, 0.13), transparent 70%),
+    radial-gradient(520px 300px at 12% 8%, rgba(90, 184, 255, 0.1), transparent 70%);
+}
+
+/* elevated surface with a light that follows the pointer */
+.surface {
+  position: relative;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 120px), var(--color-panel);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 24px 48px -24px rgba(0, 0, 0, 0.6);
+  transition: border-color 0.25s ease;
+}
+.surface::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    520px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(255, 255, 255, 0.055),
+    transparent 45%
+  );
+}
+.surface:hover {
+  border-color: var(--color-linestrong);
+}
+.surface:hover::before {
+  opacity: 1;
+}
+
+/* diagram blocks */
+.part rect.part-body {
+  transition:
+    fill-opacity 0.25s ease,
+    stroke-width 0.2s ease;
+}
+.part:hover rect.part-body {
+  fill-opacity: 0.22;
+}
+.part {
+  transition: opacity 0.35s ease;
+}
+
+.select-ring {
+  animation: select-ring 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes select-ring {
+  from {
+    transform: scale(1.12);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.fan-spin {
+  animation: fan-spin 1.6s linear infinite;
+}
+@keyframes fan-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.core-busy {
+  animation: core-busy 0.9s ease-in-out infinite;
+}
+@keyframes core-busy {
+  0%,
+  100% {
+    fill-opacity: 0.25;
+  }
+  50% {
+    fill-opacity: 1;
+  }
+}
+
+.pulse-soft {
+  animation: pulse-soft 1.4s ease-in-out infinite;
+}
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.flash {
+  animation: flash 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes flash {
+  from {
+    transform: scale(1.14);
+    filter: brightness(1.7);
+  }
+  to {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+.pop-in {
+  animation: pop-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* range input */
+input[type="range"] {
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-panel3);
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  border: 2px solid var(--color-bg);
+  box-shadow: 0 0 0 1px var(--color-linestrong);
+  transition: transform 0.15s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  border: 2px solid var(--color-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fan-spin,
+  .core-busy,
+  .pulse-soft,
+  .flash,
+  .pop-in,
+  .select-ring {
+    animation: none;
+  }
 }
