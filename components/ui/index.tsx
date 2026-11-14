@@ -17,6 +17,8 @@ const ICONS = {
   arrow: "M13 5.5 19.5 12 13 18.5l-1.4-1.4 4.1-4.1H4.5v-2h11.2l-4.1-4.1z",
   menu: "M4 7h16v2H4zM4 15h16v2H4z",
   close: "M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4z",
+  plus: "M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z",
+  minus: "M5 11h14v2H5z",
 } as const;
 
 export function Icon({ name, size = 16 }: { name: keyof typeof ICONS; size?: number }) {

@@ -1,8 +1,10 @@
 import CpuVsGpu from "@/components/CpuVsGpu";
 import GpuAnatomy from "@/components/GpuAnatomy";
+import GpuModelExplorer from "@/components/GpuModelExplorer";
 import GraphicsPipeline from "@/components/GraphicsPipeline";
 import Hero from "@/components/Hero";
 import Roadmap from "@/components/Roadmap";
+import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import TinyGpuSim from "@/components/TinyGpuSim";
 import { Reveal } from "@/components/ui";
@@ -45,20 +47,29 @@ export default function Home() {
   return (
     <div className="relative">
       <a
-        href="#anatomy"
+        href="#model"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:text-white"
       >
         Skip to content
       </a>
-      <SiteHeader />
+      <SiteHeader home />
 
       <main id="top" className="relative mx-auto max-w-6xl px-5 sm:px-6">
         <Hero />
 
         <Section
+          id="model"
+          kicker="3D model"
+          title="Take the card apart"
+          lead="A graphics card you can turn, open up and explore. Click any part to fly to it, then open its page for the full explanation."
+        >
+          <GpuModelExplorer />
+        </Section>
+
+        <Section
           id="anatomy"
-          kicker="Components"
-          title="The components of a graphics card"
+          kicker="How it connects"
+          title="How the parts work together"
           lead="A simplified map of a graphics card. The dark rectangle in the middle is the GPU chip itself; everything around it exists to feed it data, power and cool air. Select a block to learn about it, or start the tour to follow one job through the whole card."
         >
           <GpuAnatomy />
@@ -101,14 +112,7 @@ export default function Home() {
         </Section>
       </main>
 
-      <footer className="bg-panel">
-        <div className="mx-auto max-w-6xl px-5 py-6 text-xs leading-relaxed text-mute sm:px-6">
-          <p className="border-b border-line pb-4">
-            Diagrams are simplified for learning; real chips have many more parts.
-          </p>
-          <p className="pt-4">GPU Explorer</p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

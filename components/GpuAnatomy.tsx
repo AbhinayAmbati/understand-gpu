@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/gsap";
 import { Button, Icon, Surface } from "@/components/ui";
@@ -616,6 +617,13 @@ export default function GpuAnatomy() {
               </span>
               <span className="text-ink/90">{part.fact}</span>
             </div>
+            <Link
+              href={`/components/${part.id}`}
+              className="detail-item group mt-5 inline-flex items-center gap-1 text-[15px] text-accent underline-offset-4 hover:underline"
+            >
+              Read the full page
+              <span className="transition-transform duration-200 group-hover:translate-x-1">›</span>
+            </Link>
           </div>
         </Surface>
       </aside>

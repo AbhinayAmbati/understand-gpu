@@ -5,8 +5,8 @@ import { gsap, prefersReducedMotion, useGSAP } from "@/lib/gsap";
 import { CountUp, Icon, LinkButton } from "@/components/ui";
 
 const STATS = [
-  { value: 13, label: "components explained" },
-  { value: 9, label: "steps in the guided tour" },
+  { value: 1, label: "graphics card to take apart in 3D" },
+  { value: 13, label: "pages, one per component" },
   { value: 4, label: "cores in the live simulator" },
   { value: 6, label: "pipeline stages animated" },
 ];
@@ -126,7 +126,7 @@ export default function Hero() {
         your browser.
       </p>
       <div className="hero-cta mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-        <LinkButton href="#anatomy" variant="primary">
+        <LinkButton href="#model" variant="primary">
           Open the GPU
         </LinkButton>
         <LinkButton href="#core" variant="link" className="group px-0">
