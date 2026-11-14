@@ -96,7 +96,9 @@ export default function GraphicsPipeline() {
     let raf = 0;
     let last = performance.now();
     const frame = (now: number) => {
-      const dt = now - last;
+      // the frame timestamp can be earlier than the time this effect started,
+      // and a background tab can produce a huge gap: keep the step in range
+      const dt = Math.min(100, Math.max(0, now - last));
       last = now;
       setProgress((p) => p + dt / DURATION[stage]);
       raf = requestAnimationFrame(frame);
@@ -115,7 +117,7 @@ export default function GraphicsPipeline() {
     }
   }, [playing, progress, limit]);
 
-  const t = Math.min(1, progress);
+  const t = Math.min(1, Math.max(0, progress));
   const pick = (i: number) => {
     setStage(i);
     setProgress(playing ? 0 : 1);
@@ -219,7 +221,10 @@ export default function GraphicsPipeline() {
               x={0}
               y={
                 fragments[
-                  Math.min(fragments.length - 1, stage === 3 ? coveredCount : shadedCount)
+                  Math.max(
+                    0,
+                    Math.min(fragments.length - 1, stage === 3 ? coveredCount : shadedCount),
+                  )
                 ].y * CELL
               }
               width={GW * CELL}
