@@ -63,7 +63,7 @@ function PartBox({
         }
       }}
       className="part cursor-pointer outline-none"
-      opacity={dim ? 0.22 : 1}
+      opacity={dim ? 0.28 : 1}
     >
       <rect
         className="part-body"
@@ -73,7 +73,7 @@ function PartBox({
         height={part.h}
         rx={9}
         fill={color}
-        fillOpacity={active ? 0.24 : selected ? 0.18 : 0.08}
+        fillOpacity={active ? 0.2 : selected ? 0.14 : 0.07}
         stroke={color}
         strokeOpacity={selected || active ? 1 : 0.65}
         strokeWidth={active ? 2 : 1.2}
@@ -90,7 +90,6 @@ function PartBox({
           fill="none"
           stroke={color}
           strokeWidth={2}
-          style={{ filter: `drop-shadow(0 0 8px ${color})` }}
         />
       )}
 
@@ -246,9 +245,11 @@ export default function GpuAnatomy() {
     () => {
       const fill = tour.current?.querySelector<HTMLElement>(".seg-current");
       if (!fill) return;
+      // the segment's fill is owned by GSAP only while it is the current step
+      const release = () => gsap.set(fill, { clearProps: "transform" });
       if (!playing) {
         gsap.set(fill, { scaleX: 1 });
-        return;
+        return release;
       }
       gsap.fromTo(
         fill,
@@ -256,6 +257,7 @@ export default function GpuAnatomy() {
         { scaleX: 1, duration: STEP_SECONDS, ease: "none", onComplete: advance },
       );
       gsap.from(".step-copy", { y: 8, autoAlpha: 0, duration: 0.4, ease: "power2.out" });
+      return release;
     },
     { dependencies: [step, playing], scope: tour, revertOnUpdate: true },
   );
@@ -287,7 +289,7 @@ export default function GpuAnatomy() {
       <div className="min-w-0">
         <Surface className="overflow-hidden">
           {/* category filter */}
-          <div className="flex flex-wrap items-center gap-1.5 border-b border-line px-4 py-3">
+          <div className="flex flex-wrap items-center gap-1 px-5 pt-5 sm:px-7 sm:pt-6">
             <span className="mr-1 text-xs text-faint">Highlight</span>
             {(Object.keys(CATEGORY) as Category[]).map((c) => {
               const on = filter === c;
@@ -299,8 +301,8 @@ export default function GpuAnatomy() {
                   onClick={() => setFilter(on ? null : c)}
                   className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs transition active:scale-95 ${
                     on
-                      ? "border-linestrong bg-panel3 text-ink"
-                      : "border-transparent text-mute hover:bg-panel2 hover:text-ink"
+                      ? "border-transparent bg-white text-ink shadow-[0_1px_3px_rgba(0,0,0,0.12)]"
+                      : "border-transparent text-mute hover:bg-black/[0.05] hover:text-ink"
                   }`}
                 >
                   <span
@@ -313,7 +315,7 @@ export default function GpuAnatomy() {
             })}
           </div>
 
-          <div className="overflow-x-auto p-2 sm:p-3">
+          <div className="overflow-x-auto p-3 sm:p-5">
             <div className="relative min-w-[640px]">
               <svg
                 ref={svg}
@@ -324,7 +326,7 @@ export default function GpuAnatomy() {
               >
                 <defs>
                   <pattern id="pcb-dots" width="16" height="16" patternUnits="userSpaceOnUse">
-                    <circle cx="1" cy="1" r="1" fill="#1b3a30" />
+                    <circle cx="1" cy="1" r="1" fill="#e3e3e8" />
                   </pattern>
                   <filter id="packet-glow" x="-200%" y="-200%" width="500%" height="500%">
                     <feGaussianBlur stdDeviation="4" result="b" />
@@ -336,7 +338,7 @@ export default function GpuAnatomy() {
                 </defs>
 
                 {/* circuit board */}
-                <rect x={185} y={30} width={795} height={480} rx={16} fill="#08130f" />
+                <rect x={185} y={30} width={795} height={480} rx={16} fill="#ffffff" />
                 <rect
                   x={185}
                   y={30}
@@ -344,15 +346,15 @@ export default function GpuAnatomy() {
                   height={480}
                   rx={16}
                   fill="url(#pcb-dots)"
-                  stroke="#1c4335"
-                  strokeWidth={1.5}
+                  stroke="#d2d2d7"
+                  strokeWidth={1}
                 />
                 <text
                   x={202}
                   y={53}
                   fontSize={10.5}
                   letterSpacing={1.2}
-                  fill="#4d8f79"
+                  fill="#7a7a80"
                   className="font-mono"
                 >
                   GRAPHICS CARD · CIRCUIT BOARD
@@ -365,8 +367,8 @@ export default function GpuAnatomy() {
                   width={455}
                   height={285}
                   rx={12}
-                  fill="#0b1017"
-                  stroke="#34425a"
+                  fill="#fafafc"
+                  stroke="#c7c7cc"
                   strokeWidth={1.5}
                 />
                 <text
@@ -374,14 +376,14 @@ export default function GpuAnatomy() {
                   y={81}
                   fontSize={10.5}
                   letterSpacing={1.2}
-                  fill="#93a0b3"
+                  fill="#7a7a80"
                   className="font-mono"
                 >
                   GPU CHIP
                 </text>
 
                 {/* static wiring */}
-                <g stroke="#2e3a4b" strokeWidth={1.5} fill="none">
+                <g stroke="#d2d2d7" strokeWidth={1.5} fill="none">
                   {STEPS.filter((s) => s.path).map((s) => (
                     <path key={s.title} d={s.path} />
                   ))}
@@ -424,10 +426,9 @@ export default function GpuAnatomy() {
                         key={i}
                         className="packet"
                         r={5}
-                        fill="#fff"
-                        stroke={current.color}
-                        strokeWidth={2.5}
-                        filter="url(#packet-glow)"
+                        fill={current.color}
+                        stroke="#fff"
+                        strokeWidth={2}
                         visibility="hidden"
                       />
                     ))}
@@ -436,8 +437,8 @@ export default function GpuAnatomy() {
 
                 {current?.parts.includes("vrm") && (
                   <g pointerEvents="none" fill="none" strokeWidth={2.5} strokeLinecap="round">
-                    <path d="M350 400 L350 345" stroke="#ff8370" className="pulse-soft" />
-                    <path d="M650 345 L650 400" stroke="#4fd6d6" className="pulse-soft" />
+                    <path d="M350 400 L350 345" stroke="#e3342f" className="pulse-soft" />
+                    <path d="M650 345 L650 400" stroke="#0b93a6" className="pulse-soft" />
                   </g>
                 )}
 
@@ -456,10 +457,10 @@ export default function GpuAnatomy() {
                         textAnchor="middle"
                         fontSize={12.5}
                         fontWeight={600}
-                        fill="#eef2f7"
-                        stroke="#0b1017"
+                        fill="#1d1d1f"
+                        stroke="#ffffff"
                         strokeWidth={3}
-                        strokeOpacity={0.55}
+                        strokeOpacity={0.85}
                         paintOrder="stroke"
                         opacity={dim ? 0.3 : 1}
                         className="select-none transition-opacity duration-300"
@@ -476,7 +477,7 @@ export default function GpuAnatomy() {
                 <div
                   key={hoverPart.id}
                   role="presentation"
-                  className="pop-in pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full rounded-lg border border-linestrong bg-panel3/95 px-3 py-2 shadow-xl backdrop-blur"
+                  className="pop-in pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full rounded-xl bg-white/95 px-3 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.14),0_0_0_0.5px_rgba(0,0,0,0.08)] backdrop-blur"
                   style={{
                     left: `${((hoverPart.x + hoverPart.w / 2) / VB_W) * 100}%`,
                     top: `calc(${(hoverPart.y / VB_H) * 100}% - 8px)`,
@@ -499,7 +500,7 @@ export default function GpuAnatomy() {
         </Surface>
 
         {/* guided tour */}
-        <Surface className="mt-4 p-4 sm:p-5">
+        <Surface className="mt-4 p-5 sm:p-7">
           <div ref={tour}>
             <div className="flex flex-wrap items-center gap-2">
               <Button
@@ -512,17 +513,17 @@ export default function GpuAnatomy() {
                 <Icon name={playing ? "pause" : "play"} size={14} />
                 {playing ? "Pause tour" : step === null ? "Start the tour" : "Resume tour"}
               </Button>
-              <Button aria-label="Previous step" onClick={() => go(-1)} className="w-9 px-0">
+              <Button aria-label="Previous step" onClick={() => go(-1)} className="w-9 px-0!">
                 <Icon name="prev" size={20} />
               </Button>
-              <Button aria-label="Next step" onClick={() => go(1)} className="w-9 px-0">
+              <Button aria-label="Next step" onClick={() => go(1)} className="w-9 px-0!">
                 <Icon name="next" size={20} />
               </Button>
               <span className="ml-auto hidden items-center gap-1.5 text-xs text-faint sm:flex">
-                <kbd className="rounded border border-line bg-panel2 px-1.5 py-0.5 font-mono text-[11px]">
+                <kbd className="rounded-md bg-white px-1.5 py-0.5 font-mono text-[11px] shadow-[0_0_0_0.5px_rgba(0,0,0,0.15)]">
                   ←
                 </kbd>
-                <kbd className="rounded border border-line bg-panel2 px-1.5 py-0.5 font-mono text-[11px]">
+                <kbd className="rounded-md bg-white px-1.5 py-0.5 font-mono text-[11px] shadow-[0_0_0_0.5px_rgba(0,0,0,0.15)]">
                   →
                 </kbd>
                 to step
@@ -546,13 +547,13 @@ export default function GpuAnatomy() {
                   <span className="block h-1 overflow-hidden rounded-full bg-panel3 transition-[height] group-hover:h-1.5">
                     <span
                       className={`block h-full origin-left rounded-full ${
-                        step === i ? "seg-current" : ""
+                        step === i
+                          ? "seg-current"
+                          : step !== null && i < step
+                            ? "scale-x-100"
+                            : "scale-x-0"
                       }`}
-                      style={{
-                        background: s.color,
-                        transform:
-                          step !== null && i < step ? "scaleX(1)" : step === i ? undefined : "scaleX(0)",
-                      }}
+                      style={{ background: s.color }}
                     />
                   </span>
                 </button>
@@ -564,7 +565,7 @@ export default function GpuAnatomy() {
                 <div key={step} className="step-copy">
                   <p className="flex items-center gap-2 text-sm font-semibold">
                     <span
-                      className="grid h-5 min-w-5 place-items-center rounded-full px-1 font-mono text-[11px] text-black"
+                      className="grid h-5 min-w-5 place-items-center rounded-full px-1 font-mono text-[11px] text-white"
                       style={{ background: current.color }}
                     >
                       {step! + 1}
@@ -586,34 +587,30 @@ export default function GpuAnatomy() {
       </div>
 
       {/* detail panel */}
-      <aside ref={panel} className="lg:sticky lg:top-20 lg:self-start" aria-live="polite">
+      <aside ref={panel} className="lg:sticky lg:top-16 lg:self-start" aria-live="polite">
         <Surface className="overflow-hidden">
-          <div
-            className="h-1 transition-colors duration-300"
-            style={{ background: partColor }}
-          />
-          <div className="p-5">
+          <div className="p-6 sm:p-7">
             <span
-              className="detail-item inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
-              style={{ color: partColor, borderColor: `${partColor}55`, background: `${partColor}14` }}
+              className="detail-item inline-flex items-center gap-1.5 text-[13px] font-medium"
+              style={{ color: partColor }}
             >
               <span className="h-1.5 w-1.5 rounded-full" style={{ background: partColor }} />
               {CATEGORY[part.cat].label}
             </span>
-            <h3 className="detail-item mt-3 text-xl font-semibold tracking-tight">{part.name}</h3>
+            <h3 className="detail-item mt-2 text-2xl font-semibold tracking-tight">{part.name}</h3>
             <p className="detail-item mt-2 text-sm leading-relaxed text-ink/90">{part.what}</p>
 
-            <h4 className="detail-item mt-5 text-[11px] font-semibold tracking-[0.12em] text-faint uppercase">
+            <h4 className="detail-item mt-5 text-[13px] font-medium text-mute">
               How it works
             </h4>
             <p className="detail-item mt-1.5 text-sm leading-relaxed text-mute">{part.how}</p>
 
-            <h4 className="detail-item mt-5 text-[11px] font-semibold tracking-[0.12em] text-faint uppercase">
+            <h4 className="detail-item mt-5 text-[13px] font-medium text-mute">
               Think of it as
             </h4>
             <p className="detail-item mt-1.5 text-sm leading-relaxed text-mute">{part.analogy}</p>
 
-            <div className="detail-item mt-5 rounded-xl border border-line bg-panel2 p-3.5 text-sm leading-relaxed">
+            <div className="detail-item mt-5 rounded-2xl bg-white p-4 text-sm leading-relaxed">
               <span className="font-semibold" style={{ color: partColor }}>
                 Scale{" "}
               </span>

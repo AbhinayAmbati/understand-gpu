@@ -108,116 +108,104 @@ export default function Hero() {
   );
 
   return (
-    <div ref={root} className="relative pt-10 pb-6 sm:pt-16 lg:pt-20">
-      <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_420px]">
-        <div>
-          <p className="hero-eyebrow inline-flex items-center gap-2 rounded-full border border-line bg-panel2/60 py-1 pr-3 pl-2 text-xs text-mute">
-            <span className="pulse-soft h-1.5 w-1.5 rounded-full bg-comp" />
-            An animated guide for complete beginners
-          </p>
-          <h1 className="mt-5 text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] sm:text-[3.4rem]">
-            <span className="block overflow-hidden pb-1">
-              <span className="hero-line block">How a GPU works,</span>
-            </span>
-            <span className="block overflow-hidden pb-2">
-              <span className="hero-line block bg-gradient-to-r from-comp via-[#8fe9d0] to-mem bg-clip-text text-transparent">
-                one component at a time
-              </span>
-            </span>
-          </h1>
-          <p className="hero-copy mt-5 max-w-xl text-[17px] leading-relaxed text-mute">
-            A GPU is fast for one reason: it does the same simple calculation on thousands of
-            pieces of data at once. Open one up, follow a job through it, and run a working
-            miniature in your browser.
-          </p>
-          <div className="hero-cta mt-8 flex flex-wrap gap-3">
-            <LinkButton href="#anatomy" variant="primary" className="group">
-              Open the GPU
-              <span className="transition-transform duration-200 group-hover:translate-x-0.5">
-                <Icon name="arrow" />
-              </span>
-            </LinkButton>
-            <LinkButton href="#core">
-              <Icon name="play" size={14} />
-              Run the tiny GPU
-            </LinkButton>
-          </div>
-        </div>
+    <div ref={root} className="relative pt-14 pb-4 text-center sm:pt-20">
+      <p className="hero-eyebrow text-[17px] font-semibold text-accent sm:text-[19px]">
+        GPU Explorer
+      </p>
+      <h1 className="mx-auto mt-2 max-w-4xl text-[2.25rem] leading-[1.06] font-semibold tracking-[-0.03em] sm:text-[4.5rem]">
+        <span className="block overflow-hidden pb-1">
+          <span className="hero-line block">How a GPU works.</span>
+        </span>
+        <span className="block overflow-hidden pb-2">
+          <span className="hero-line block text-mute">One component at a time.</span>
+        </span>
+      </h1>
+      <p className="hero-copy mx-auto mt-5 max-w-2xl text-[19px] leading-[1.45] text-mute sm:text-[21px]">
+        A GPU is fast for one reason: it does the same simple calculation on thousands of pieces
+        of data at once. Open one up, follow a job through it, and run a working miniature in
+        your browser.
+      </p>
+      <div className="hero-cta mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+        <LinkButton href="#anatomy" variant="primary">
+          Open the GPU
+        </LinkButton>
+        <LinkButton href="#core" variant="link" className="group px-0">
+          Run the tiny GPU
+          <span className="transition-transform duration-200 group-hover:translate-x-0.5">
+            <Icon name="next" size={18} />
+          </span>
+        </LinkButton>
+      </div>
 
-        {/* animated chip */}
-        <div className="chip-wrap mx-auto w-full max-w-[340px] [perspective:900px] lg:max-w-none">
-          <div ref={chip} className="[transform-style:preserve-3d]">
-            <svg viewBox="0 0 420 420" className="chip-float block h-auto w-full" aria-hidden="true">
-              <defs>
-                <linearGradient id="chip-edge" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stopColor="#5ee6a0" stopOpacity="0.9" />
-                  <stop offset="0.5" stopColor="#2e3a4b" />
-                  <stop offset="1" stopColor="#5ab8ff" stopOpacity="0.9" />
-                </linearGradient>
-                <radialGradient id="chip-glow">
-                  <stop offset="0" stopColor="#5ee6a0" stopOpacity="0.22" />
-                  <stop offset="1" stopColor="#5ee6a0" stopOpacity="0" />
-                </radialGradient>
-              </defs>
-              <circle cx="210" cy="210" r="205" fill="url(#chip-glow)" />
-              <g fill="none" strokeLinecap="round">
-                {TRACES.map((d, i) => (
-                  <g key={i}>
-                    <path
-                      d={d}
-                      className="chip-trace"
-                      stroke="#2e3a4b"
-                      strokeWidth="2"
-                      pathLength={1}
-                      strokeDasharray="1"
-                    />
-                    <path
-                      d={d}
-                      className="chip-pulse"
-                      stroke={i % 3 === 0 ? "#5ab8ff" : "#5ee6a0"}
-                      strokeWidth="2"
-                      pathLength={1}
-                      strokeDasharray="0.3 1"
-                      strokeDashoffset="0.3"
-                    />
-                  </g>
-                ))}
-              </g>
-              <rect
-                x={ORIGIN - 18}
-                y={ORIGIN - 18}
-                width={CHIP + 36}
-                height={CHIP + 36}
-                rx="18"
-                fill="#0b1016"
-                stroke="url(#chip-edge)"
-                strokeWidth="1.5"
-              />
-              {Array.from({ length: GRID * GRID }, (_, i) => (
-                <rect
-                  key={i}
-                  className="chip-cell"
-                  x={ORIGIN + (i % GRID) * (CELL + GAP)}
-                  y={ORIGIN + Math.floor(i / GRID) * (CELL + GAP)}
-                  width={CELL}
-                  height={CELL}
-                  rx="4"
-                  fill={(i * 7) % 5 === 0 ? "#5ab8ff" : "#5ee6a0"}
-                  fillOpacity="0.14"
-                />
+      {/* animated chip */}
+      <div className="chip-wrap mx-auto mt-10 w-full max-w-[300px] [perspective:900px] sm:mt-14 sm:max-w-[400px]">
+        <div ref={chip} className="[transform-style:preserve-3d]">
+          <svg
+            viewBox="0 0 420 420"
+            className="chip-float block h-auto w-full drop-shadow-[0_34px_38px_rgba(0,0,0,0.2)]"
+            aria-hidden="true"
+          >
+            <defs>
+              <linearGradient id="chip-body" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stopColor="#3a3a3c" />
+                <stop offset="1" stopColor="#111113" />
+              </linearGradient>
+            </defs>
+            <g fill="none" strokeLinecap="round">
+              {TRACES.map((d, i) => (
+                <g key={i}>
+                  <path
+                    d={d}
+                    className="chip-trace"
+                    stroke="#d2d2d7"
+                    strokeWidth="2.5"
+                    pathLength={1}
+                    strokeDasharray="1"
+                  />
+                  <path
+                    d={d}
+                    className="chip-pulse"
+                    stroke="#0071e3"
+                    strokeWidth="2.5"
+                    pathLength={1}
+                    strokeDasharray="0.3 1"
+                    strokeDashoffset="0.3"
+                  />
+                </g>
               ))}
-            </svg>
-          </div>
+            </g>
+            <rect
+              x={ORIGIN - 20}
+              y={ORIGIN - 20}
+              width={CHIP + 40}
+              height={CHIP + 40}
+              rx="30"
+              fill="url(#chip-body)"
+            />
+            {Array.from({ length: GRID * GRID }, (_, i) => (
+              <rect
+                key={i}
+                className="chip-cell"
+                x={ORIGIN + (i % GRID) * (CELL + GAP)}
+                y={ORIGIN + Math.floor(i / GRID) * (CELL + GAP)}
+                width={CELL}
+                height={CELL}
+                rx="5"
+                fill={(i * 7) % 5 === 0 ? "#2997ff" : "#ffffff"}
+                fillOpacity="0.12"
+              />
+            ))}
+          </svg>
         </div>
       </div>
 
-      <dl className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:mt-16 lg:grid-cols-4">
+      <dl className="mx-auto mt-14 grid max-w-4xl grid-cols-2 gap-y-8 border-t border-line pt-10 sm:mt-20 lg:grid-cols-4">
         {STATS.map((s) => (
-          <div key={s.label} className="hero-stat bg-panel px-5 py-4">
-            <dd className="text-2xl font-semibold tracking-tight">
+          <div key={s.label} className="hero-stat px-4">
+            <dd className="text-5xl font-semibold tracking-[-0.03em]">
               <CountUp value={s.value} />
             </dd>
-            <dt className="mt-0.5 text-[13px] text-mute">{s.label}</dt>
+            <dt className="mx-auto mt-1.5 max-w-[11rem] text-sm text-mute">{s.label}</dt>
           </div>
         ))}
       </dl>

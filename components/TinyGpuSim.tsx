@@ -15,7 +15,7 @@ import {
   type SimState,
 } from "@/lib/tinygpu";
 
-const CORE_COLORS = ["#5ee6a0", "#5ab8ff", "#f5b54a", "#b79bff"];
+const CORE_COLORS = ["#1e9e57", "#0071e3", "#e06c00", "#8f4fd1"];
 const PHASES: Phase[] = ["fetch", "decode", "execute"];
 const DEFAULT_A = [3, 8, 1, 6];
 const DEFAULT_B = [4, 2, 9, 5];
@@ -59,7 +59,7 @@ export default function TinyGpuSim() {
   const stepsDone = sim.done ? totalSteps : sim.pc * 3 + phaseIdx;
 
   return (
-    <Surface className="p-4 sm:p-6">
+    <Surface className="p-5 sm:p-8">
       {/* toolbar */}
       <div className="flex flex-wrap items-center gap-2">
         <Button
@@ -102,7 +102,7 @@ export default function TinyGpuSim() {
               setProgIdx(Number(e.target.value));
               reset();
             }}
-            className="h-9 rounded-lg border border-line bg-panel2 px-2.5 text-[13px] text-ink transition hover:border-linestrong"
+            className="h-9 rounded-full border-0 bg-black/[0.06] px-3.5 text-[13px] text-ink transition hover:bg-black/[0.1]"
           >
             {PROGRAMS.map((p, i) => (
               <option key={p.name} value={i}>
@@ -117,7 +117,7 @@ export default function TinyGpuSim() {
       <div className="mt-4 flex items-center gap-3">
         <div className="h-1 flex-1 overflow-hidden rounded-full bg-panel3">
           <div
-            className="h-full origin-left rounded-full bg-comp transition-transform duration-300 ease-out"
+            className="h-full origin-left rounded-full bg-accent transition-transform duration-300 ease-out"
             style={{ transform: `scaleX(${stepsDone / totalSteps})` }}
           />
         </div>
@@ -129,15 +129,15 @@ export default function TinyGpuSim() {
       <div className="mt-5 grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
         {/* program */}
         <div>
-          <h3 className="text-[11px] font-semibold tracking-[0.12em] text-faint uppercase">
+          <h3 className="text-[13px] font-medium text-mute">
             Program · shared by all cores
           </h3>
-          <p className="mt-1.5 font-mono text-sm text-comp">{program.goal}</p>
+          <p className="mt-1.5 font-mono text-sm text-ink">{program.goal}</p>
 
-          <ol className="relative mt-2.5 overflow-hidden rounded-xl border border-line bg-panel2 font-mono text-[13px]">
+          <ol className="relative mt-2.5 overflow-hidden rounded-2xl bg-white font-mono text-[13px]">
             <span
               aria-hidden="true"
-              className="absolute inset-x-0 top-0 border-l-2 border-comp bg-comp/[0.13] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+              className="absolute inset-x-0 top-0 border-l-2 border-accent bg-accent/[0.08] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
               style={{ height: LINE_H, transform: `translateY(${sim.pc * LINE_H}px)` }}
             />
             {program.code.map((ins, i) => {
@@ -154,7 +154,7 @@ export default function TinyGpuSim() {
                   <span className="w-3 text-right text-faint">{i}</span>
                   <span>{asm(ins)}</span>
                   {here && (
-                    <span className="pop-in ml-auto rounded bg-comp px-1.5 py-0.5 text-[10px] font-semibold text-black">
+                    <span className="pop-in ml-auto rounded bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-white">
                       PC
                     </span>
                   )}
@@ -164,10 +164,10 @@ export default function TinyGpuSim() {
           </ol>
 
           {/* phase indicator */}
-          <div className="relative mt-3 grid grid-cols-3 rounded-lg border border-line bg-panel2 p-0.5">
+          <div className="relative mt-3 grid grid-cols-3 rounded-full bg-black/[0.06] p-0.5">
             <span
               aria-hidden="true"
-              className={`absolute top-0.5 bottom-0.5 left-0.5 w-[calc((100%-4px)/3)] rounded-md bg-ink transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${
+              className={`absolute top-0.5 bottom-0.5 left-0.5 w-[calc((100%-4px)/3)] rounded-full bg-ink transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${
                 sim.done ? "opacity-0" : ""
               }`}
               style={{ transform: `translateX(${phaseIdx * 100}%)` }}
@@ -176,7 +176,7 @@ export default function TinyGpuSim() {
               <span
                 key={p}
                 className={`relative z-10 py-1.5 text-center text-[11px] font-semibold tracking-wider uppercase transition-colors duration-300 ${
-                  sim.phase === p && !sim.done ? "text-black" : "text-mute"
+                  sim.phase === p && !sim.done ? "text-white" : "text-mute"
                 }`}
               >
                 {p}
@@ -187,16 +187,19 @@ export default function TinyGpuSim() {
 
         <div className="min-w-0">
           {/* cores */}
-          <h3 className="text-[11px] font-semibold tracking-[0.12em] text-faint uppercase">
+          <h3 className="text-[13px] font-medium text-mute">
             {NUM_CORES} cores · 4 registers each (tiny scratch-pad memories)
           </h3>
           <div className="mt-2.5 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {sim.regs.map((regs, c) => (
               <div
                 key={c}
-                className="rounded-xl border border-line bg-panel2 p-3 transition-colors duration-300"
+                className="rounded-2xl bg-white p-3.5 transition-shadow duration-300"
                 style={{
-                  borderColor: sim.phase === "execute" && !sim.done ? CORE_COLORS[c] : undefined,
+                  boxShadow:
+                    sim.phase === "execute" && !sim.done
+                      ? `0 0 0 1.5px ${CORE_COLORS[c]}`
+                      : undefined,
                 }}
               >
                 <div className="flex items-center justify-between">
@@ -205,7 +208,7 @@ export default function TinyGpuSim() {
                   </span>
                   <span
                     className={`h-1.5 w-1.5 rounded-full ${playing ? "pulse-soft" : ""}`}
-                    style={{ background: sim.done ? "#3b4759" : CORE_COLORS[c] }}
+                    style={{ background: sim.done ? "#c7c7cc" : CORE_COLORS[c] }}
                   />
                 </div>
                 <div className="mt-2 grid grid-cols-2 gap-1.5 font-mono text-xs">
@@ -218,8 +221,8 @@ export default function TinyGpuSim() {
                           wrote ? "flash" : ""
                         }`}
                         style={{
-                          background: wrote ? CORE_COLORS[c] : "#0a0e14",
-                          color: wrote ? "#000" : undefined,
+                          background: wrote ? CORE_COLORS[c] : "#f5f5f7",
+                          color: wrote ? "#fff" : undefined,
                         }}
                       >
                         <span className="opacity-55">R{r}</span>
@@ -233,12 +236,12 @@ export default function TinyGpuSim() {
           </div>
 
           {/* memory */}
-          <h3 className="mt-5 text-[11px] font-semibold tracking-[0.12em] text-faint uppercase">
+          <h3 className="mt-5 text-[13px] font-medium text-mute">
             Memory · shared, like VRAM
           </h3>
           <div className="mt-2.5 grid gap-3 sm:grid-cols-3">
             {REGION.map((name, ri) => (
-              <div key={name} className="rounded-xl border border-line bg-panel2 p-3">
+              <div key={name} className="rounded-2xl bg-white p-3.5">
                 <div className="text-xs text-mute">
                   List <b className="font-semibold text-ink">{name}</b>
                   <span className="text-faint">{ri === 2 ? " · results" : " · input"}</span>
@@ -253,10 +256,10 @@ export default function TinyGpuSim() {
                         key={`${addr}-${hit ? sim.pc : "idle"}`}
                         className={`rounded-md py-1.5 text-center font-mono ${hit ? "flash" : ""}`}
                         style={{
-                          background: hit ? `${CORE_COLORS[core]}22` : "#0a0e14",
+                          background: hit ? `${CORE_COLORS[core]}1a` : "#f5f5f7",
                           boxShadow: hit
-                            ? `0 0 0 2px ${CORE_COLORS[core]}, 0 0 14px -2px ${CORE_COLORS[core]}`
-                            : "0 0 0 1px #1d2531",
+                            ? `0 0 0 2px ${CORE_COLORS[core]}`
+                            : "none",
                         }}
                       >
                         <div className="text-[10px] text-faint">
@@ -274,12 +277,12 @@ export default function TinyGpuSim() {
       </div>
 
       <div
-        className="mt-5 flex min-h-[76px] gap-3 rounded-xl border border-line bg-panel2 p-4"
+        className="mt-5 flex min-h-[76px] gap-3 rounded-2xl bg-white p-5"
         aria-live="polite"
       >
         <span
           className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${
-            sim.done ? "bg-comp" : "pulse-soft bg-ink"
+            sim.done ? "bg-comp" : "pulse-soft bg-accent"
           }`}
         />
         <p key={`${sim.pc}-${sim.phase}-${sim.done}`} className="pop-in text-sm leading-relaxed">

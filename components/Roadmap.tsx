@@ -52,26 +52,23 @@ export default function Roadmap() {
   );
 
   return (
-    <ol ref={root} className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:pt-8">
+    <ol ref={root} className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:pt-9">
       <span
         aria-hidden="true"
-        className="road-line absolute top-[7px] right-[12.5%] left-[12.5%] hidden h-px origin-left bg-gradient-to-r from-comp via-mem to-io lg:block"
+        className="road-line absolute top-[6px] right-[12.5%] left-[12.5%] hidden h-px origin-left bg-linestrong lg:block"
       />
       {ROADMAP.map((r, i) => (
         <li key={r.title} className="relative">
           <span
             aria-hidden="true"
-            className="road-dot absolute -top-8 left-1/2 hidden h-[15px] w-[15px] -translate-x-1/2 rounded-full border-2 border-bg bg-comp ring-1 ring-comp/50 lg:block"
+            className="road-dot absolute -top-9 left-1/2 hidden h-[13px] w-[13px] -translate-x-1/2 rounded-full bg-accent ring-4 ring-white lg:block"
           />
-          <Surface className="road-card h-full p-5 transition-transform duration-300 hover:-translate-y-1">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-comp">Step {i + 1}</span>
-              <span className="rounded-full border border-line px-2 py-0.5 text-[11px] text-faint">
-                {r.tag}
-              </span>
-            </div>
-            <h3 className="mt-3 font-semibold tracking-tight">{r.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-mute">{r.text}</p>
+          <Surface className="road-card h-full p-7 transition-transform duration-300 ease-out hover:-translate-y-1">
+            <p className="text-[13px] font-medium text-mute">
+              Step {i + 1} · {r.tag}
+            </p>
+            <h3 className="mt-2 text-[21px] font-semibold tracking-tight">{r.title}</h3>
+            <p className="mt-2 text-[15px] leading-relaxed text-mute">{r.text}</p>
           </Surface>
         </li>
       ))}

@@ -1,100 +1,55 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #07090d;
-  --color-panel: #0c1016;
-  --color-panel2: #121821;
-  --color-panel3: #19212d;
-  --color-line: #1d2531;
-  --color-linestrong: #2e3a4b;
-  --color-ink: #eef2f7;
-  --color-mute: #93a0b3;
-  --color-faint: #5f6c80;
-  --color-ctrl: #f5b54a;
-  --color-comp: #5ee6a0;
-  --color-mem: #5ab8ff;
-  --color-io: #b79bff;
-  --color-pwr: #ff8370;
-  --color-cool: #4fd6d6;
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --color-bg: #ffffff;
+  --color-panel: #f5f5f7;
+  --color-panel2: #ffffff;
+  --color-panel3: #e8e8ed;
+  --color-line: #e3e3e8;
+  --color-linestrong: #c7c7cc;
+  --color-ink: #1d1d1f;
+  --color-mute: #6e6e73;
+  --color-faint: #7a7a80;
+  --color-accent: #0071e3;
+  --color-ctrl: #e06c00;
+  --color-comp: #1e9e57;
+  --color-mem: #0071e3;
+  --color-io: #8f4fd1;
+  --color-pwr: #e3342f;
+  --color-cool: #0b93a6;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", var(--font-geist-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, var(--font-geist-mono), Menlo, Consolas, monospace;
 }
 
 html {
   background: var(--color-bg);
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
   background: var(--color-bg);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-feature-settings: "ss01", "cv11";
+  letter-spacing: -0.011em;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: rgba(94, 230, 160, 0.3);
+  background: rgba(0, 113, 227, 0.2);
 }
 
-/* keyboard focus: one consistent ring everywhere */
 :focus-visible {
-  outline: 2px solid var(--color-comp);
-  outline-offset: 2px;
-  border-radius: 6px;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 8px;
 }
 
-/* page backdrop: faint engineering grid that fades out */
-.backdrop {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 900px;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 75% 65% at 50% 0%, #000 30%, transparent 75%);
-}
-.backdrop::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(600px 320px at 78% 22%, rgba(94, 230, 160, 0.13), transparent 70%),
-    radial-gradient(520px 300px at 12% 8%, rgba(90, 184, 255, 0.1), transparent 70%);
-}
-
-/* elevated surface with a light that follows the pointer */
+/* tile: flat grey card, no border, no shadow */
 .surface {
   position: relative;
-  border: 1px solid var(--color-line);
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 120px), var(--color-panel);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 24px 48px -24px rgba(0, 0, 0, 0.6);
-  transition: border-color 0.25s ease;
-}
-.surface::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  background: radial-gradient(
-    520px circle at var(--mx, 50%) var(--my, 0%),
-    rgba(255, 255, 255, 0.055),
-    transparent 45%
-  );
-}
-.surface:hover {
-  border-color: var(--color-linestrong);
-}
-.surface:hover::before {
-  opacity: 1;
+  border-radius: 28px;
+  background: var(--color-panel);
 }
 
 /* diagram blocks */
@@ -104,7 +59,7 @@ body {
     stroke-width 0.2s ease;
 }
 .part:hover rect.part-body {
-  fill-opacity: 0.22;
+  fill-opacity: 0.2;
 }
 .part {
   transition: opacity 0.35s ease;
@@ -141,10 +96,10 @@ body {
 @keyframes core-busy {
   0%,
   100% {
-    fill-opacity: 0.25;
+    fill-opacity: 0.2;
   }
   50% {
-    fill-opacity: 1;
+    fill-opacity: 0.95;
   }
 }
 
@@ -154,7 +109,7 @@ body {
 @keyframes pulse-soft {
   0%,
   100% {
-    opacity: 0.45;
+    opacity: 0.4;
   }
   50% {
     opacity: 1;
@@ -162,16 +117,14 @@ body {
 }
 
 .flash {
-  animation: flash 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: flash 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 @keyframes flash {
   from {
-    transform: scale(1.14);
-    filter: brightness(1.7);
+    transform: scale(1.12);
   }
   to {
     transform: scale(1);
-    filter: brightness(1);
   }
 }
 
@@ -189,7 +142,6 @@ body {
   }
 }
 
-/* range input */
 input[type="range"] {
   appearance: none;
   height: 4px;
@@ -199,23 +151,27 @@ input[type="range"] {
 }
 input[type="range"]::-webkit-slider-thumb {
   appearance: none;
-  width: 14px;
-  height: 14px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: var(--color-ink);
-  border: 2px solid var(--color-bg);
-  box-shadow: 0 0 0 1px var(--color-linestrong);
+  background: #fff;
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.2);
   transition: transform 0.15s ease;
 }
 input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 input[type="range"]::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
+  width: 18px;
+  height: 18px;
+  border: 0;
   border-radius: 50%;
-  background: var(--color-ink);
-  border: 2px solid var(--color-bg);
+  background: #fff;
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 @media (prefers-reduced-motion: reduce) {

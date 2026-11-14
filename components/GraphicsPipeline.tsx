@@ -138,7 +138,7 @@ export default function GraphicsPipeline() {
   const dotsOpacity = stage <= 3 ? 1 : stage === 4 ? 1 - t : 0;
 
   return (
-    <Surface className="p-4 sm:p-6">
+    <Surface className="p-5 sm:p-8">
       {/* stage stepper */}
       <div className="flex flex-wrap items-center gap-2">
         <ol className="flex min-w-0 flex-1 flex-wrap gap-1.5">
@@ -150,24 +150,22 @@ export default function GraphicsPipeline() {
                   type="button"
                   aria-current={on ? "step" : undefined}
                   onClick={() => pick(i)}
-                  className={`relative flex h-9 items-center gap-2 overflow-hidden rounded-lg border px-3 text-[13px] font-medium transition active:scale-[0.97] ${
+                  className={`relative flex h-9 items-center gap-2 overflow-hidden rounded-full border px-3.5 text-[13px] transition active:scale-[0.97] ${
                     on
-                      ? "border-io/60 bg-io/10 text-ink"
-                      : i < stage
-                        ? "border-line bg-panel2 text-mute hover:text-ink"
-                        : "border-line text-mute hover:bg-panel2 hover:text-ink"
+                      ? "border-transparent bg-white text-ink shadow-[0_1px_3px_rgba(0,0,0,0.12)]"
+                      : "border-transparent text-mute hover:bg-black/[0.05] hover:text-ink"
                   }`}
                 >
                   {on && (
                     <span
                       aria-hidden="true"
-                      className="absolute inset-y-0 left-0 w-full origin-left bg-io/20"
+                      className="absolute inset-y-0 left-0 w-full origin-left bg-accent/10"
                       style={{ transform: `scaleX(${t})` }}
                     />
                   )}
                   <span
                     className={`relative grid h-4.5 w-4.5 place-items-center rounded-full font-mono text-[10px] ${
-                      on ? "bg-io text-black" : i < stage ? "bg-panel3 text-ink" : "bg-panel3 text-faint"
+                      on ? "bg-accent text-white" : i < stage ? "bg-ink text-white" : "bg-panel3 text-mute"
                     }`}
                   >
                     {i + 1}
@@ -187,7 +185,7 @@ export default function GraphicsPipeline() {
       <div className="mt-4 grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
         <svg
           viewBox={`0 0 ${GW * CELL} ${GH * CELL}`}
-          className="block h-auto w-full rounded-xl border border-line bg-[#05070b]"
+          className="block h-auto w-full rounded-[20px] bg-[#000000]"
           role="img"
           aria-label={`Graphics pipeline stage ${stage + 1}: ${STAGES[stage].name}`}
         >
@@ -226,7 +224,7 @@ export default function GraphicsPipeline() {
               }
               width={GW * CELL}
               height={CELL}
-              fill={stage === 3 ? "#ffffff" : "#b79bff"}
+              fill={stage === 3 ? "#ffffff" : "#2997ff"}
               opacity={0.12}
             />
           )}
@@ -282,10 +280,10 @@ export default function GraphicsPipeline() {
 
         <div>
           <div key={stage} className="pop-in" aria-live="polite">
-            <p className="text-[11px] font-semibold tracking-[0.12em] text-io uppercase">
+            <p className="text-[13px] font-medium text-mute">
               Stage {stage + 1} of {STAGES.length}
             </p>
-            <h3 className="mt-1.5 text-xl font-semibold tracking-tight">{STAGES[stage].name}</h3>
+            <h3 className="mt-1 text-2xl font-semibold tracking-tight">{STAGES[stage].name}</h3>
             <p className="mt-2 text-sm leading-relaxed text-mute">{STAGES[stage].text}</p>
           </div>
 
@@ -296,7 +294,7 @@ export default function GraphicsPipeline() {
               ["pixels found", String(coveredCount)],
               ["pixels coloured", String(shadedCount)],
             ].map(([k, v]) => (
-              <div key={k} className="rounded-lg border border-line bg-panel2 p-2.5">
+              <div key={k} className="rounded-2xl bg-white p-3.5">
                 <dt className="text-faint">{k}</dt>
                 <dd className="mt-0.5 text-base font-semibold tabular-nums">{v}</dd>
               </div>
@@ -319,7 +317,7 @@ export default function GraphicsPipeline() {
               }}
               className="mt-2 w-full"
               style={{
-                background: `linear-gradient(to right, #b79bff ${t * 100}%, #19212d ${t * 100}%)`,
+                background: `linear-gradient(to right, #0071e3 ${t * 100}%, #e8e8ed ${t * 100}%)`,
               }}
             />
           </label>

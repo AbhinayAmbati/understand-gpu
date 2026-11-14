@@ -30,22 +30,21 @@ export function Icon({ name, size = 16 }: { name: keyof typeof ICONS; size?: num
 /* ---------- button ---------- */
 
 const BTN_BASE =
-  "inline-flex shrink-0 select-none items-center justify-center gap-2 rounded-lg font-medium whitespace-nowrap " +
-  "transition-[transform,background-color,border-color,color,box-shadow] duration-150 ease-out " +
-  "active:scale-[0.96] disabled:pointer-events-none disabled:opacity-40";
+  "inline-flex shrink-0 select-none items-center justify-center gap-1.5 rounded-full font-normal whitespace-nowrap " +
+  "transition-[transform,background-color,color] duration-200 ease-out " +
+  "active:scale-[0.97] disabled:pointer-events-none disabled:opacity-35";
 
 const BTN_VARIANT = {
-  primary:
-    "bg-comp text-[#04130b] hover:bg-[#82f2b9] shadow-[0_0_0_1px_rgba(94,230,160,0.35),0_10px_28px_-10px_rgba(94,230,160,0.6)] hover:shadow-[0_0_0_1px_rgba(94,230,160,0.5),0_14px_32px_-10px_rgba(94,230,160,0.75)]",
-  secondary:
-    "border border-line bg-panel2/70 text-ink hover:border-linestrong hover:bg-panel3",
-  ghost: "text-mute hover:bg-panel2 hover:text-ink",
+  primary: "bg-accent text-white hover:bg-[#0077ed]",
+  secondary: "bg-black/[0.06] text-ink hover:bg-black/[0.1]",
+  ghost: "text-mute hover:bg-black/[0.05] hover:text-ink",
+  link: "text-accent hover:underline underline-offset-4",
 };
 
 const BTN_SIZE = {
-  sm: "h-8 px-3 text-[13px]",
-  md: "h-9 px-3.5 text-sm",
-  lg: "h-11 px-5 text-sm",
+  sm: "h-8 px-3.5 text-[13px]",
+  md: "h-9 px-4 text-sm",
+  lg: "h-11 px-[22px] text-[17px]",
 };
 
 type ButtonProps = {
@@ -101,12 +100,12 @@ export function Segmented<T extends string | number>({
     <div
       role="radiogroup"
       aria-label={label}
-      className="relative grid h-9 rounded-lg border border-line bg-panel2/70 p-0.5"
+      className="relative grid h-9 rounded-full bg-black/[0.06] p-0.5"
       style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
     >
       <span
         aria-hidden="true"
-        className="absolute top-0.5 bottom-0.5 left-0.5 rounded-md bg-panel3 shadow-[0_0_0_1px_var(--color-linestrong)] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+        className="absolute top-0.5 bottom-0.5 left-0.5 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.14),0_0_0_0.5px_rgba(0,0,0,0.06)] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
         style={{
           width: `calc((100% - 4px) / ${options.length})`,
           transform: `translateX(${index * 100}%)`,
@@ -119,7 +118,7 @@ export function Segmented<T extends string | number>({
           role="radio"
           aria-checked={o.value === value}
           onClick={() => onChange(o.value)}
-          className={`relative z-10 rounded-md px-3 text-[13px] font-medium transition-colors ${
+          className={`relative z-10 rounded-full px-3.5 text-[13px] transition-colors ${
             o.value === value ? "text-ink" : "text-mute hover:text-ink"
           }`}
         >
@@ -130,19 +129,11 @@ export function Segmented<T extends string | number>({
   );
 }
 
-/* ---------- surface card with pointer-following light ---------- */
+/* ---------- tile ---------- */
 
 export function Surface({ className = "", children, ...rest }: ComponentProps<"div">) {
   return (
-    <div
-      className={`surface ${className}`}
-      onMouseMove={(e) => {
-        const r = e.currentTarget.getBoundingClientRect();
-        e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
-        e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
-      }}
-      {...rest}
-    >
+    <div className={`surface ${className}`} {...rest}>
       {children}
     </div>
   );
@@ -234,7 +225,7 @@ export function Meter({
         <span className="text-mute">{label}</span>
         <span className="font-mono tabular-nums text-ink">{value}</span>
       </div>
-      <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-panel3">
+      <div className="mt-2 h-1 overflow-hidden rounded-full bg-panel3">
         <div
           className="h-full origin-left rounded-full transition-transform duration-200 ease-out"
           style={{ background: color, transform: `scaleX(${Math.min(1, fraction)})` }}

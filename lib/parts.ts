@@ -16,12 +16,12 @@ export type PartId =
 export type Category = "ctrl" | "comp" | "mem" | "io" | "pwr" | "cool";
 
 export const CATEGORY: Record<Category, { color: string; label: string }> = {
-  ctrl: { color: "#f5b54a", label: "Control" },
-  comp: { color: "#5ee6a0", label: "Compute" },
-  mem: { color: "#5ab8ff", label: "Memory" },
-  io: { color: "#b79bff", label: "Input / output" },
-  pwr: { color: "#ff8370", label: "Power" },
-  cool: { color: "#4fd6d6", label: "Cooling" },
+  ctrl: { color: "#e06c00", label: "Control" },
+  comp: { color: "#1e9e57", label: "Compute" },
+  mem: { color: "#0071e3", label: "Memory" },
+  io: { color: "#8f4fd1", label: "Input / output" },
+  pwr: { color: "#e3342f", label: "Power" },
+  cool: { color: "#0b93a6", label: "Cooling" },
 };
 
 export type Part = {
@@ -240,60 +240,60 @@ export const STEPS: Step[] = [
     text: "Your program runs on the CPU. It packs up commands (“draw this scene”) and data, and sends them across the PCIe connection to the graphics card.",
     parts: ["host", "pcie"],
     path: "M146 205 L200 205",
-    color: "#b79bff",
+    color: "#8f4fd1",
   },
   {
     title: "Commands are read",
     text: "The command processor takes each command from the queue and works out which parts of the chip it needs.",
     parts: ["pcie", "cmd"],
     path: "M290 205 L318 205 L318 130 L345 130",
-    color: "#f5b54a",
+    color: "#e06c00",
   },
   {
     title: "Work is split into pieces",
     text: "The scheduler cuts the job into thousands of small identical tasks and hands them to free compute cores.",
     parts: ["cmd", "sched", "cores"],
     path: "M400 130 L400 220 L465 220 L465 175 L475 175",
-    color: "#f5b54a",
+    color: "#e06c00",
   },
   {
     title: "Data is fetched from memory",
     text: "The cores need their input data. The memory controller fetches it from VRAM, and the cache keeps a copy close by for next time.",
     parts: ["vram", "memctl", "cache", "cores"],
     path: "M815 160 L795 160 L795 220 L710 220 L710 130 L645 130",
-    color: "#5ab8ff",
+    color: "#0071e3",
   },
   {
     title: "All cores compute at once",
     text: "Every core runs the same small program on its own piece of data, all at the same time. This is where the GPU gets its speed.",
     parts: ["cores"],
-    color: "#5ee6a0",
+    color: "#1e9e57",
   },
   {
     title: "Triangles become pixels",
     text: "For graphics, the rasterizer works out which pixels each triangle covers, and texture units look up the colours for those pixels.",
     parts: ["cores", "raster"],
     path: "M560 255 L560 265 L445 265 L445 275",
-    color: "#5ee6a0",
+    color: "#1e9e57",
   },
   {
     title: "Results are written back",
     text: "Finished pixels (or finished numbers, for AI) travel back through the memory controller and are stored in VRAM. For graphics, this stored image is called the framebuffer.",
     parts: ["cores", "cache", "memctl", "vram"],
     path: "M645 130 L710 130 L710 220 L795 220 L795 160 L815 160",
-    color: "#5ab8ff",
+    color: "#0071e3",
   },
   {
     title: "The picture goes to the screen",
     text: "The display engine reads the framebuffer out of VRAM and sends it through the display outputs to your monitor, 60 or more times every second.",
     parts: ["vram", "memctl", "display", "ports"],
     path: "M815 200 L795 200 L795 220 L710 220 L710 300 L795 300 L795 330 L815 330",
-    color: "#b79bff",
+    color: "#8f4fd1",
   },
   {
     title: "Meanwhile: power in, heat out",
     text: "The whole time, the power stage feeds the chip hundreds of amps, and the cooler carries away the heat that work produces.",
     parts: ["vrm", "cooler"],
-    color: "#ff8370",
+    color: "#e3342f",
   },
 ];

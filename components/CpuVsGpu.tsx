@@ -31,7 +31,7 @@ function pixelColor(i: number): string {
     x = t;
     n++;
   }
-  if (n === 40) return "#0a0f18";
+  if (n === 40) return "#1d1d1f";
   return `hsl(${200 - n * 9} 85% ${28 + n * 2.2}%)`;
 }
 
@@ -50,7 +50,7 @@ function Grid({
 }) {
   return (
     <div
-      className="grid aspect-[32/20] w-full gap-px overflow-hidden rounded-xl border border-line bg-black/50 p-1.5"
+      className="grid aspect-[32/20] w-full gap-px overflow-hidden rounded-2xl bg-white p-2"
       style={{ gridTemplateColumns: `repeat(${W}, minmax(0, 1fr))` }}
       aria-hidden="true"
     >
@@ -61,8 +61,7 @@ function Grid({
             key={i}
             className="rounded-[1.5px] transition-colors duration-300"
             style={{
-              background: working ? accent : i < done ? c : "#141b26",
-              boxShadow: working ? `0 0 6px ${accent}` : undefined,
+              background: working ? accent : i < done ? c : "#e8e8ed",
             }}
           />
         );
@@ -117,7 +116,7 @@ export default function CpuVsGpu() {
   };
 
   return (
-    <Surface className="p-4 sm:p-6">
+    <Surface className="p-5 sm:p-8">
       <div className="flex flex-wrap items-center gap-2">
         <Button
           variant="primary"
@@ -161,19 +160,19 @@ export default function CpuVsGpu() {
             <h3 className="font-semibold tracking-tight">CPU</h3>
             <span className="text-sm text-mute">4 powerful cores</span>
           </div>
-          <Grid colors={colors} done={cpuDone} batch={CPU_CORES} running={active} accent="#f5b54a" />
+          <Grid colors={colors} done={cpuDone} batch={CPU_CORES} running={active} accent="#e06c00" />
           <div className="mt-3 grid grid-cols-2 gap-4">
             <Meter
               label="Pixels done"
               value={`${cpuDone} / ${TOTAL}`}
               fraction={cpuDone / TOTAL}
-              color="#f5b54a"
+              color="#e06c00"
             />
             <Meter
               label="Time used"
               value={`${Math.min(tick, CPU_TICKS)} units`}
               fraction={Math.min(tick, CPU_TICKS) / CPU_TICKS}
-              color="#f5b54a"
+              color="#e06c00"
             />
           </div>
           <p className="mt-3 text-sm leading-relaxed text-mute">
@@ -188,7 +187,7 @@ export default function CpuVsGpu() {
               {Array.from({ length: 8 }, (_, i) => (
                 <span
                   key={i}
-                  className={`h-[3px] w-[3px] rounded-[1px] bg-comp ${
+                  className={`h-[3px] w-[3px] rounded-[1px] bg-accent ${
                     active && gpuDone < TOTAL ? "pulse-soft" : ""
                   }`}
                 />
@@ -202,20 +201,20 @@ export default function CpuVsGpu() {
             done={gpuDone}
             batch={gpuCores}
             running={active && gpuDone < TOTAL}
-            accent="#5ee6a0"
+            accent="#0071e3"
           />
           <div className="mt-3 grid grid-cols-2 gap-4">
             <Meter
               label="Pixels done"
               value={`${gpuDone} / ${TOTAL}`}
               fraction={gpuDone / TOTAL}
-              color="#5ee6a0"
+              color="#0071e3"
             />
             <Meter
               label="Time used"
               value={`${Math.min(tick, gpuTicks)} units`}
               fraction={Math.min(tick, gpuTicks) / CPU_TICKS}
-              color="#5ee6a0"
+              color="#0071e3"
             />
           </div>
           <p className="mt-3 text-sm leading-relaxed text-mute">
@@ -229,9 +228,9 @@ export default function CpuVsGpu() {
         {finished ? (
           <div
             ref={result}
-            className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-xl border border-comp/30 bg-comp/[0.07] p-4"
+            className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-2xl bg-white p-5"
           >
-            <span className="speedup text-4xl font-semibold tracking-tight text-comp tabular-nums">
+            <span className="speedup text-5xl font-semibold tracking-tight text-ink tabular-nums">
               {Number.isInteger(speedup) ? speedup : speedup.toFixed(1)}×
             </span>
             <p className="max-w-xl text-sm leading-relaxed text-mute">
@@ -241,7 +240,7 @@ export default function CpuVsGpu() {
             </p>
           </div>
         ) : (
-          <p className="rounded-xl border border-line bg-panel2 p-4 text-sm leading-relaxed text-mute">
+          <p className="rounded-2xl bg-white p-5 text-sm leading-relaxed text-mute">
             <b className="font-semibold text-ink">The catch:</b> this only works when a job splits
             into many independent, identical pieces, like pixels or the numbers in a matrix. Where
             each step depends on the one before, a CPU is still faster. That is why computers have
