@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import SiteFooter from "@/components/SiteFooter";
-import SiteHeader from "@/components/SiteHeader";
+import { Container, PageIntro, Shell } from "@/components/Layout";
 import { Reveal } from "@/components/ui";
 import { DETAILS } from "@/lib/details";
 import { CATEGORY, PARTS, type Category } from "@/lib/parts";
@@ -24,25 +23,19 @@ const ORDER: Category[] = ["io", "ctrl", "comp", "mem", "pwr", "cool"];
 
 export default function ComponentsIndex() {
   return (
-    <div>
-      <SiteHeader />
-      <main className="mx-auto max-w-6xl px-5 pb-20 sm:px-6 sm:pb-28">
-        <Reveal stagger={0.08} className="mx-auto max-w-3xl pt-14 text-center sm:pt-20">
-          <p className="text-[17px] font-semibold text-accent">Components</p>
-          <h1 className="mt-2 text-[2.25rem] leading-[1.06] font-semibold tracking-[-0.03em] sm:text-[4rem]">
-            Thirteen parts. One job.
-          </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-[17px] leading-[1.5] text-mute sm:text-[19px]">
-            Each component has its own page with a 3D view, a step-by-step explanation of what
-            happens inside it, and the terms you will meet when you read further.
-          </p>
-        </Reveal>
-
+    <Shell>
+      <PageIntro
+        crumbs={[{ href: "/", label: "Home" }, { label: "Components" }]}
+        kicker="Components"
+        title="Thirteen parts. One job."
+        lead="Each component has its own page with a 3D view, a step-by-step explanation of what happens inside it, and the terms you will meet when you read further."
+      />
+      <Container className="pb-20 sm:pb-28">
         {ORDER.map((cat) => {
           const items = PARTS.filter((p) => p.cat === cat);
           const color = CATEGORY[cat].color;
           return (
-            <section key={cat} className="mt-14 sm:mt-20" aria-labelledby={`group-${cat}`}>
+            <section key={cat} className="mt-12 first:mt-0 sm:mt-16" aria-labelledby={`group-${cat}`}>
               <Reveal>
                 <h2
                   id={`group-${cat}`}
@@ -76,8 +69,7 @@ export default function ComponentsIndex() {
             </section>
           );
         })}
-      </main>
-      <SiteFooter />
-    </div>
+      </Container>
+    </Shell>
   );
 }

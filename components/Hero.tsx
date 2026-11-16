@@ -2,14 +2,9 @@
 
 import { useRef } from "react";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/gsap";
-import { CountUp, Icon, LinkButton } from "@/components/ui";
+import Link from "next/link";
+import { Icon } from "@/components/ui";
 
-const STATS = [
-  { value: 1, label: "graphics card to take apart in 3D" },
-  { value: 13, label: "pages, one per component" },
-  { value: 4, label: "cores in the live simulator" },
-  { value: 6, label: "pipeline stages animated" },
-];
 
 const GRID = 8;
 const CELL = 22;
@@ -52,8 +47,7 @@ export default function Hero() {
         .from(".hero-line", { yPercent: 110, duration: 0.9, stagger: 0.09 }, "-=0.25")
         .from(".hero-copy", { y: 16, autoAlpha: 0, duration: 0.6 }, "-=0.5")
         .from(".hero-cta > *", { y: 12, autoAlpha: 0, duration: 0.5, stagger: 0.07 }, "-=0.4")
-        .from(".hero-stat", { y: 16, autoAlpha: 0, duration: 0.5, stagger: 0.06 }, "-=0.3")
-        .from(
+                .from(
           ".chip-wrap",
           { scale: 0.86, autoAlpha: 0, duration: 1.1, ease: "power2.out" },
           0.15,
@@ -108,7 +102,7 @@ export default function Hero() {
   );
 
   return (
-    <div ref={root} className="relative pt-14 pb-4 text-center sm:pt-20">
+    <div ref={root} className="relative pt-12 pb-4 text-center sm:pt-20">
       <p className="hero-eyebrow text-[17px] font-semibold text-accent sm:text-[19px]">
         GPU Explorer
       </p>
@@ -126,15 +120,21 @@ export default function Hero() {
         your browser.
       </p>
       <div className="hero-cta mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-        <LinkButton href="#model" variant="primary">
-          Open the GPU
-        </LinkButton>
-        <LinkButton href="#core" variant="link" className="group px-0">
-          Run the tiny GPU
+        <Link
+          href="/model"
+          className="inline-flex h-11 items-center rounded-full bg-accent px-[22px] text-[17px] text-white transition-[background-color,scale] duration-200 hover:bg-[#0077ed] active:scale-[0.97]"
+        >
+          Explore in 3D
+        </Link>
+        <Link
+          href="/how-it-works"
+          className="group inline-flex h-11 items-center gap-1 text-[17px] text-accent underline-offset-4 hover:underline"
+        >
+          Start the guided tour
           <span className="transition-transform duration-200 group-hover:translate-x-0.5">
             <Icon name="next" size={18} />
           </span>
-        </LinkButton>
+        </Link>
       </div>
 
       {/* animated chip */}
@@ -199,16 +199,6 @@ export default function Hero() {
         </div>
       </div>
 
-      <dl className="mx-auto mt-14 grid max-w-4xl grid-cols-2 gap-y-8 border-t border-line pt-10 sm:mt-20 lg:grid-cols-4">
-        {STATS.map((s) => (
-          <div key={s.label} className="hero-stat px-4">
-            <dd className="text-5xl font-semibold tracking-[-0.03em]">
-              <CountUp value={s.value} />
-            </dd>
-            <dt className="mx-auto mt-1.5 max-w-[11rem] text-sm text-mute">{s.label}</dt>
-          </div>
-        ))}
-      </dl>
     </div>
   );
 }

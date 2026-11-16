@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ComponentViewer from "@/components/ComponentViewer";
-import SiteFooter from "@/components/SiteFooter";
-import SiteHeader from "@/components/SiteHeader";
+import { Container, PageIntro, PrevNext, Shell } from "@/components/Layout";
 import { Reveal } from "@/components/ui";
 import { DETAILS } from "@/lib/details";
 import { CATEGORY, PARTS, PART_BY_ID, STEPS, type PartId } from "@/lib/parts";
@@ -47,31 +46,21 @@ export default async function ComponentPage({ params }: PageProps<"/components/[
   );
 
   return (
-    <div>
-      <SiteHeader />
-      <main className="mx-auto max-w-6xl px-5 pb-20 sm:px-6 sm:pb-28">
-        {/* title */}
-        <Reveal stagger={0.08} className="mx-auto max-w-3xl pt-10 text-center sm:pt-14">
-          <nav aria-label="Breadcrumb" className="text-[13px] text-mute">
-            <Link href="/components" className="hover:text-ink">
-              Components
-            </Link>
-            <span className="mx-1.5 text-linestrong">/</span>
-            <span aria-current="page">{part.name}</span>
-          </nav>
-          <p className="mt-6 text-[17px] font-semibold" style={{ color }}>
-            {CATEGORY[part.cat].label}
-          </p>
-          <h1 className="mt-2 text-[2.25rem] leading-[1.06] font-semibold tracking-[-0.03em] sm:text-[4rem]">
-            {part.name}
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-[21px] leading-[1.35] font-medium tracking-tight text-mute sm:text-[26px]">
-            {detail.tagline}
-          </p>
-        </Reveal>
-
+    <Shell>
+      <PageIntro
+        crumbs={[
+          { href: "/", label: "Home" },
+          { href: "/components", label: "Components" },
+          { label: part.name },
+        ]}
+        kicker={CATEGORY[part.cat].label}
+        kickerColor={color}
+        title={part.name}
+        lead={detail.tagline}
+      />
+      <Container className="pb-20 sm:pb-28">
         {/* 3D view */}
-        <Reveal className="mt-10 sm:mt-14" delay={0.1}>
+        <Reveal delay={0.1}>
           <ComponentViewer id={part.id} />
           <p className="mt-3 text-center text-[13px] text-mute">
             The highlighted part is the {part.name.toLowerCase()}. Click any other part to open
@@ -229,34 +218,14 @@ export default async function ComponentPage({ params }: PageProps<"/components/[
         </section>
 
         {/* previous / next */}
-        <nav
-          aria-label="More components"
-          className="mt-16 grid gap-4 border-t border-line pt-8 sm:mt-24 sm:grid-cols-2"
-        >
-          <Link href={`/components/${prev.id}`} className="group rounded-2xl p-4 hover:bg-panel">
-            <span className="text-[13px] text-mute">Previous</span>
-            <span className="mt-0.5 flex items-center gap-1.5 text-[19px] font-semibold tracking-tight">
-              <span className="transition-transform duration-200 group-hover:-translate-x-1">
-                ‹
-              </span>
-              {prev.name}
-            </span>
-          </Link>
-          <Link
-            href={`/components/${next.id}`}
-            className="group rounded-2xl p-4 hover:bg-panel sm:text-right"
-          >
-            <span className="text-[13px] text-mute">Next</span>
-            <span className="mt-0.5 flex items-center gap-1.5 text-[19px] font-semibold tracking-tight sm:justify-end">
-              {next.name}
-              <span className="transition-transform duration-200 group-hover:translate-x-1">
-                ›
-              </span>
-            </span>
-          </Link>
-        </nav>
-      </main>
-      <SiteFooter />
-    </div>
+        <div className="mt-16 sm:mt-24">
+          <PrevNext
+            label="More components"
+            prev={{ href: `/components/${prev.id}`, title: prev.name, meta: "Previous" }}
+            next={{ href: `/components/${next.id}`, title: next.name, meta: "Next" }}
+          />
+        </div>
+      </Container>
+    </Shell>
   );
 }

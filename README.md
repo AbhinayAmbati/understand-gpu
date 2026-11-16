@@ -8,13 +8,17 @@ A GPU is fast for one reason: it does the same simple calculation on thousands o
 
 ## What's inside
 
-| Section | What you can do |
+The site is a short landing page, six chapters (one page each) and a page for every component.
+
+| Page | What you can do |
 | --- | --- |
-| **Components** | Click any block of a graphics-card diagram (PCIe, command processor, scheduler, cores, cache, memory controller, VRAM, display engine, power, cooling) to read what it does. A 9-step guided tour follows one job through the card with animated data packets. |
-| **CPU vs GPU** | Race 4 fast CPU cores against 16, 64 or 160 simple GPU cores colouring the same image, and see the speed-up. |
-| **Inside a core** | Run a working 4-core GPU simulator. Step through fetch, decode and execute, and watch registers and shared memory change. |
-| **Drawing a frame** | Watch the graphics pipeline turn three points into a coloured triangle: vertices, vertex shader, assembly, rasterizer, fragment shader, framebuffer. Scrub through any stage. |
-| **Build your own** | A short roadmap from logic gates to a tiny GPU on real hardware. |
+| `/model` — **3D model** | Turn a 3D graphics card, open it up with a slider, click any part to fly to it, and show that part on its own. |
+| `/how-it-works` — **How it works** | Click any block of a graphics-card diagram to read what it does. A 9-step guided tour follows one job through the card. |
+| `/parallel` — **CPU vs GPU** | Race 4 fast CPU cores against 16, 64 or 160 simple GPU cores colouring the same image. |
+| `/core` — **Inside a core** | Run a working 4-core GPU simulator. Step through fetch, decode and execute, and watch registers and memory change. |
+| `/pipeline` — **Drawing a frame** | Watch the graphics pipeline turn three points into a coloured triangle, and scrub through any stage. |
+| `/build` — **Build your own** | A short roadmap from logic gates to a tiny GPU on real hardware. |
+| `/components` and `/components/<part>` | One page per component (PCIe, scheduler, cores, cache, VRAM, power, cooling and more): a focused 3D view, how it works step by step, key figures, a glossary and related parts. |
 
 ![Components section with the guided tour](docs/components.png)
 
@@ -45,7 +49,8 @@ Open http://localhost:3000.
 - [Next.js](https://nextjs.org) 16 (App Router) and React 19
 - TypeScript
 - [Tailwind CSS](https://tailwindcss.com) 4
-- [GSAP](https://gsap.com) for scroll, entrance and motion-path animation
+- [three.js](https://threejs.org) for the 3D model
+- [GSAP](https://gsap.com) for scroll, entrance, camera and motion-path animation
 
 There is no backend and no data is collected. Everything runs in the browser.
 
@@ -53,23 +58,39 @@ There is no backend and no data is collected. Everything runs in the browser.
 
 ```
 app/
-  layout.tsx          Root layout and fonts
-  page.tsx            The page: section order, headings and intro text
-  globals.css         Design tokens (colours, fonts) and keyframe animations
+  page.tsx              Landing page
+  model/ how-it-works/ parallel/ core/ pipeline/ build/
+                        One folder per chapter page
+  components/page.tsx   Index of all components
+  components/[id]/      One page per component
+  globals.css           Design tokens (colours, fonts) and keyframe animations
 components/
-  SiteHeader.tsx      Sticky nav, scroll progress, current-section highlight
-  Hero.tsx            Intro and animated chip
-  GpuAnatomy.tsx      Graphics-card diagram, guided tour, detail panel
-  CpuVsGpu.tsx        The CPU vs GPU race
-  TinyGpuSim.tsx      Interface for the 4-core simulator
-  GraphicsPipeline.tsx  Animated triangle pipeline
-  Roadmap.tsx         "Build your own" steps
-  ui/index.tsx        Shared buttons, segmented control, tiles, scroll reveal
+  Layout.tsx            Page shell, shared container, page intro, chapter navigation
+  SiteHeader.tsx        Sticky navigation
+  Gpu3D.tsx             The 3D viewer: camera, lighting, shadows, picking, controls
+  GpuModelExplorer.tsx  3D chapter: viewer plus the parts panel
+  ComponentViewer.tsx   3D view focused on one component
+  GpuAnatomy.tsx, CpuVsGpu.tsx, TinyGpuSim.tsx, GraphicsPipeline.tsx, Roadmap.tsx
+                        The interactive piece for each chapter
+  ui/index.tsx          Shared buttons, segmented control, tiles, scroll reveal
 lib/
-  parts.ts            Text and positions for every component, and the tour steps
-  tinygpu.ts          The simulator itself (pure functions, no UI)
-  gsap.ts             GSAP plugin registration
+  chapters.ts           Chapter order, titles and intros
+  parts.ts              Every component's name, category, text and tour steps
+  details.ts            Long-form content for each component page
+  gpu3d.ts              Builds the 3D graphics card with three.js
+  tinygpu.ts            The simulator itself (pure functions, no UI)
 ```
+
+## The 3D model
+
+`lib/gpu3d.ts` builds the card from simple shapes: a printed circuit board with traces and labels, the GPU package with coloured regions for each internal block, VRAM, the power stage, the PCIe connector, the display bracket, and a cooler with curved heat pipes, a fin stack and two fans.
+
+To keep it smooth:
+
+- Static pieces are merged into one mesh per part and material, so the whole card is a few dozen draw calls.
+- Frames are drawn only when something changes; the view pauses when it is scrolled out of sight or the tab is hidden.
+- Shadows are recalculated only when parts move.
+- If frames are consistently slow, the viewer lowers its resolution and then simplifies its shadows.
 
 ## How the tiny GPU works
 
