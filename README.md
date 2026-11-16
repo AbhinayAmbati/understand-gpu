@@ -66,7 +66,7 @@ app/
   globals.css           Design tokens (colours, fonts) and keyframe animations
 components/
   Layout.tsx            Page shell, shared container, page intro, chapter navigation
-  SiteHeader.tsx        Sticky navigation
+  SiteHeader.tsx        Floating navigation bar with Chapters and Components menus
   Gpu3D.tsx             The 3D viewer: camera, lighting, shadows, picking, controls
   GpuModelExplorer.tsx  3D chapter: viewer plus the parts panel
   ComponentViewer.tsx   3D view focused on one component

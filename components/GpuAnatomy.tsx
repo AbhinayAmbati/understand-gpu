@@ -588,7 +588,7 @@ export default function GpuAnatomy() {
       </div>
 
       {/* detail panel */}
-      <aside ref={panel} className="lg:sticky lg:top-16 lg:self-start" aria-live="polite">
+      <aside ref={panel} className="lg:sticky lg:top-24 lg:self-start" aria-live="polite">
         <Surface className="overflow-hidden">
           <div className="p-6 sm:p-7">
             <span

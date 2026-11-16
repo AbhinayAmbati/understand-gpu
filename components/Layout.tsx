@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import SiteFooter from "@/components/SiteFooter";
-import SiteHeader from "@/components/SiteHeader";
 import { Reveal } from "@/components/ui";
 import { CHAPTERS, CHAPTER_BY_SLUG } from "@/lib/chapters";
 
@@ -13,14 +12,7 @@ export function Container({ children, className = "" }: { children: ReactNode; c
 /** Header, main area and footer for every page. */
 export function Shell({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:text-white"
-      >
-        Skip to content
-      </a>
-      <SiteHeader />
+    <div className="flex min-h-[calc(100vh-68px)] flex-col">
       <main id="main" className="flex-1">
         {children}
       </main>
